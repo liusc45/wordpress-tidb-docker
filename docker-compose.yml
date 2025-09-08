@@ -1,11 +1,10 @@
 version: "3"
 services:
   wordpress:
-    image: wordpress
+    image: wordpress:php8.4-fpm-alpine
     volumes:
+      - wp_data:/var/www/html
       - "./wordpress-tidb-compatibility-plugin/tidb-compatibility/tidb-compatibility.php:/var/www/html/wp-content/mu-plugins/tidb-compatibility.php"
-    ports:
-      - 80:80
     environment:
       WORDPRESS_DB_HOST: '${TIDB_HOST}:${TIDB_PORT}'
       WORDPRESS_DB_NAME: '${TIDB_DB_NAME}'
@@ -16,3 +15,17 @@ services:
         define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);
         define('MYSQL_SSL_CA', '/etc/ssl/certs/ca-certificates.crt');
         define('DB_COLLATE', 'utf8mb4_bin');
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - wp_data:/srv
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - wordpress
+
+volumes:
+  wp_data:

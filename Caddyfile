@@ -1,0 +1,12 @@
+:80 {
+  root * /srv
+  encode zstd gzip
+  php_fastcgi wordpress:9000
+  file_server
+
+  header {
+    X-Frame-Options "SAMEORIGIN"
+    X-Content-Type-Options "nosniff"
+    Referrer-Policy "strict-origin-when-cross-origin"
+  }
+}
