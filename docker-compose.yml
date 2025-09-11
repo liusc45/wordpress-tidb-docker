@@ -12,7 +12,7 @@ services:
       WORDPRESS_DB_COLLATE: 'utf8mb4_bin'
       WORDPRESS_CONFIG_EXTRA: |
         define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);
-        define('MYSQL_SSL_CA', '/etc/ssl/certs/ca-certificates.crt');
+        define('MYSQL_SSL_CA', getenv('TIDB_SSL_CA') ?: '/etc/ssl/certs/ca-certificates.crt');
         define('DB_COLLATE', 'utf8mb4_bin');
 
   caddy:
