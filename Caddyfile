@@ -1,5 +1,5 @@
 :80 {
-  root * /srv
+  root * /var/www/html
   encode zstd gzip
   php_fastcgi wordpress:9000
   file_server
